@@ -1,6 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
+import Modal from "react-modal";
+import Login from '../auth/Login';
+import Register from '../auth/Register';
+
+const customStyles = {
+  content: {
+    top: "50%",
+    left: "50%",
+    right: "auto",
+    bottom: "auto",
+    marginRight: "-50%",
+    transform: "translate(-50%, -50%)",
+  },
+};
 
 const Landing = () => {
+  const [isRegister, setIsRegister] = useState(true);
+  const [modalIsOpen, setIsOpen] = useState(false);
+
+  function openModal(type) {
+    type === 'login' ? setIsRegister(false) : setIsRegister(true);
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+   // may not need this 
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   return (
     <section className="landing">
       <div className="dark-overlay">
@@ -11,13 +41,22 @@ const Landing = () => {
             would like to create a review you must create an account
           </p>
           <div className="buttons">
-            <a href="/register" className="btn btn-primary">
+            <button onClick={() => {openModal('register')}} className="btn btn-primary">
               Sign Up
-            </a>
-            <a href="/login" className="btn btn-light">
+            </button>
+            <button onClick={() => {openModal('login')}} className="btn btn-light">
               Login
-            </a>
+            </button>
           </div>
+          <Modal
+            isOpen={modalIsOpen}
+            onAfterOpen={afterOpenModal}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+          >
+            {isRegister ? <Register /> : <Login />}
+          </Modal>
         </div>
       </div>
     </section>
